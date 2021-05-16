@@ -5,6 +5,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import { listItems, nestedListItems } from "./NavItems";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -70,65 +71,19 @@ export default function NestedList() {
           onMouseEnter={handleOpen}
           onMouseLeave={handleClose}
         >
-          <ListItem
-            button
-            className={classes.nested}
-            title={"Exchange Software"}
-          >
-            <ListItemText primary="Exchange Software" />
-          </ListItem>
-          <ListItem
-            button
-            className={classes.nested}
-            title={"Asset Digitization"}
-          >
-            <ListItemText primary="Asset Digitization" />
-          </ListItem>
-          <ListItem
-            button
-            className={classes.nested}
-            title={"Banking Software"}
-          >
-            <ListItemText primary="Banking Software" />
-          </ListItem>
-          <ListItem
-            button
-            className={classes.nested}
-            title={"Compliance Software Tool"}
-          >
-            <ListItemText primary="Compliance Software Tool" />
-          </ListItem>
-          <ListItem
-            button
-            className={classes.nested}
-            title={"Virtual/Physical Debit Card"}
-          >
-            <ListItemText primary="Virtual/Physical Debit Card" />
-          </ListItem>
-          <ListItem
-            button
-            className={classes.nested}
-            title={"Money Transfer Software"}
-          >
-            <ListItemText primary="Money Transfer Software" />
-          </ListItem>
-          <ListItem button className={classes.nested} title={"Payment Gateway"}>
-            <ListItemText primary="Payment Gateway" />
-          </ListItem>
+          {nestedListItems.map((item) => (
+            <ListItem button className={classes.nested} title={item}>
+              <ListItemText primary={item} />
+            </ListItem>
+          ))}
         </List>
       </Collapse>
-      <ListItem button className={classes.listItem} title={"Tech"}>
-        <ListItemText primary="Tech" />
-      </ListItem>
-      <ListItem button className={classes.listItem} title={"Products"}>
-        <ListItemText primary="Products" />
-      </ListItem>
-      <ListItem button className={classes.listItem} title={"About Us"}>
-        <ListItemText primary="About Us" />
-      </ListItem>
-      <ListItem button className={classes.listItem} title={"Get In Touch"}>
-        <ListItemText primary="Get In Touch" />
-      </ListItem>
+
+      {listItems.map((item) => (
+        <ListItem button className={classes.listItem} title={item}>
+          <ListItemText primary={item} />
+        </ListItem>
+      ))}
     </List>
   );
 }

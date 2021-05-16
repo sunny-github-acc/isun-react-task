@@ -3,8 +3,13 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
+import NavbarList from "./NavbarList";
+import { listItems, nestedListItems } from "./NavItems";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       height: "70px",
@@ -14,13 +19,34 @@ const useStyles = makeStyles(() =>
       justifyContent: "space-between",
       "z-index": "999",
     },
-    menu: { color: "white" },
     signup: {
       fontSize: "18px",
       textTransform: "none",
-      border: "1px solid white",
+      border: "2px solid white",
       marginRight: "10px",
       height: "40px",
+      padding: "0 20px 0 20px",
+      "&:hover": {
+        background: "white",
+        color: "#1A1D20",
+      },
+    },
+    login: {
+      fontSize: "18px",
+      textTransform: "none",
+      margin: "0 10px 0 10px",
+      padding: "0 20px 0 20px",
+      height: "40px",
+      background: "white",
+      color: "#1A1D20",
+      "&:hover": {
+        color: "white",
+      },
+    },
+    menu: {
+      color: "white",
+      display: "flex",
+      alignItems: "center",
     },
     menuButton: {
       color: "white",
@@ -28,6 +54,10 @@ const useStyles = makeStyles(() =>
       marginLeft: "10px",
       textTransform: "none",
       fontSize: "18px",
+      display: "none",
+      [theme.breakpoints.down("sm")]: {
+        display: "inline-flex",
+      },
     },
     menuButtonText: {
       paddingRight: "15px",
@@ -40,13 +70,13 @@ const useStyles = makeStyles(() =>
       height: "40px",
       color: "white",
     },
-    title: {
+    logo: {
       background: "#1E3AFF",
       color: "white",
       fontSize: "25px",
       fontWeight: "bold",
-      width: "60px",
-      lineHeight: "60px",
+      width: "65px",
+      lineHeight: "55px",
       textAlign: "center",
       textTransform: "none",
       borderRadius: "0",
@@ -55,27 +85,66 @@ const useStyles = makeStyles(() =>
         color: "#1E3AFF",
       },
     },
+    list: { display: "flex" },
+    nestedList: {
+      display: "none",
+      color: "white",
+      [theme.breakpoints.up("md")]: {
+        display: "inline-flex",
+      },
+    },
+    listItem: {
+      whiteSpace: "nowrap",
+      color: "white",
+      "&:hover": {
+        color: "grey",
+      },
+      display: "none",
+      [theme.breakpoints.up("md")]: {
+        display: "inline-flex",
+      },
+    },
   })
 );
 
-export default function ButtonAppBar({ handleChange, checked }: any) {
+export default function ButtonAppBar({ theme, handleChange, checked }: any) {
   const classes = useStyles();
+  const text = "What We Do";
 
   return (
     <div className={classes.root}>
       <Toolbar className={classes.toolbar}>
-        <Button className={classes.title}>isun</Button>
+        <Button className={classes.logo}>isun</Button>
 
         <Typography className={classes.menu}>
+          <List
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+            className={classes.list}
+          >
+            <ListItem>
+              <div className={classes.nestedList}>
+                <NavbarList text={text}></NavbarList>
+              </div>
+            </ListItem>
+            {listItems.map((item) => (
+              <ListItem button className={classes.listItem} title={item}>
+                <ListItemText primary={item} />
+              </ListItem>
+            ))}
+          </List>
+          <Button className={classes.login} color="inherit">
+            Log in
+          </Button>
           <Button className={classes.signup} color="inherit">
             Sign up
           </Button>
           <Button className={classes.menuButton} onClick={handleChange}>
-            {checked ? (
+            {/* {checked ? (
               <p className={classes.menuButtonText}> Close </p>
             ) : (
               <p className={classes.menuButtonText}> Menu </p>
-            )}
+            )} */}
 
             <MenuIcon className={classes.menuButtonIcon}></MenuIcon>
           </Button>
