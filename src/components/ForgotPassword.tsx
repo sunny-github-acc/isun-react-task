@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login({ handleLoginToggle }: any) {
+export default function Login() {
   const classes = useStyles();
   const emailRef = useRef<any>();
   const { resetPassword }: any = useAuth();
@@ -100,12 +100,17 @@ export default function Login({ handleLoginToggle }: any) {
     setLoading(false);
   }
 
+  const handleLogo = (e: any) => {
+    e.preventDefault();
+    history.push("/");
+  };
+
   return (
     <div className={classes.container}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-          <Button onClick={handleLoginToggle}>
+          <Button onClick={handleLogo}>
             <img className={classes.logo} src={importImg} alt="iSun logo" />
           </Button>
           <Typography component="h1" variant="h5" className={classes.paperText}>

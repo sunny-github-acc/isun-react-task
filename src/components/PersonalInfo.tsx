@@ -3,7 +3,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -13,31 +13,57 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "100vw",
       display: "flex",
       justifyContent: "center",
+      fontSize: "16px ",
     },
     title: {
-      padding: "40px",
+      padding: "20px",
       textAlign: "center",
       color: "white",
       backgroundColor: "transparent",
       fontSize: "25px",
+      [theme.breakpoints.up("md")]: {
+        padding: "40px",
+      },
     },
     container: {
-      padding: "40px",
-      width: "80vw",
-      border: "1px solid #999",
+      width: "90vw",
+      display: "flex",
+      justifyContent: "center",
+    },
+    grid: {
+      display: "flex",
+      justifyContent: "center",
+    },
+    tablet: {
+      display: "none",
+      [theme.breakpoints.up("md")]: {
+        display: "inline-flex",
+      },
     },
     paper: {
-      padding: theme.spacing(2),
+      padding: "12px",
       textAlign: "center",
       color: theme.palette.text.secondary,
+      width: "80vw",
+      margin: "5px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      [theme.breakpoints.up("md")]: {
+        justifyContent: "center",
+      },
     },
     submit: {
-      margin: theme.spacing(3, 0, 2),
+      padding: "12px",
       backgroundColor: "#1E3AFF",
+      margin: 0,
     },
     error: {
       color: "red",
       background: "pink",
+    },
+    icon: {
+      paddingRight: "10px",
     },
   })
 );
@@ -47,6 +73,13 @@ export default function CenteredGrid() {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
   const history = useHistory();
+  let userFirstName, userLastName, userAllow, userAllowsEmails;
+
+  if (currentUser.displayName) {
+    [userFirstName, userLastName, userAllow] =
+      currentUser.displayName.split("#.#");
+    userAllowsEmails = userAllow === "allowExtraEmails";
+  }
 
   async function handleLogout() {
     setError("");
@@ -75,14 +108,72 @@ export default function CenteredGrid() {
           </Grid>
           <Grid className={classes.container} container spacing={3}>
             {error && (
-              <Grid item xs={12}>
-                <Paper className={classes.error}>{error}</Paper>
-              </Grid>
+              <div>
+                {/* <Grid item xs={2} className={classes.grid}>
+                  <Paper className={classes.error}>Error</Paper>
+                </Grid> */}
+                <Grid item xs={10} className={classes.grid}>
+                  <Paper className={classes.error}>
+                    <i className={`material-icons ${classes.icon}`}>warning</i>
+                    {error}
+                  </Paper>
+                </Grid>
+              </div>
             )}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>{currentUser.email}</Paper>
+            <Grid
+              item
+              xs={12}
+              md={2}
+              className={`${classes.grid} ${classes.tablet}`}
+            >
+              <Paper className={classes.paper}>Email</Paper>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={9} className={classes.grid}>
+              <Paper className={classes.paper}>
+                <i className={`material-icons ${classes.icon}`}>email</i>{" "}
+                {currentUser.email}
+              </Paper>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={2}
+              className={`${classes.grid} ${classes.tablet}`}
+            >
+              <Paper className={classes.paper}>Name</Paper>
+            </Grid>
+            <Grid item xs={12} md={9} className={classes.grid}>
+              {/* <Paper className={classes.paper}>Name</Paper> */}
+
+              <Paper className={classes.paper}>
+                <i className={`material-icons ${classes.icon}`}>person</i>{" "}
+                {userFirstName} {userLastName}
+              </Paper>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={2}
+              className={`${classes.grid} ${classes.tablet}`}
+            >
+              <Paper className={classes.paper}>Subscription</Paper>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={9}
+              className={classes.grid}
+              onClick={handleUpdate}
+            >
+              <Paper className={classes.paper}>
+                <i className={`material-icons ${classes.icon}`}>
+                  notifications
+                </i>
+                {userAllowsEmails && <div>Subscribed</div>}
+                {!userAllowsEmails && <div>Not subscribed</div>}
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={11} className={classes.grid}>
               <Button
                 type="submit"
                 fullWidth
@@ -95,14 +186,14 @@ export default function CenteredGrid() {
                 Update Profile
               </Button>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={11} className={classes.grid}>
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                color="primary"
                 className={classes.submit}
                 onClick={handleLogout}
+                style={{ background: "#999" }}
               >
                 Log Out
               </Button>

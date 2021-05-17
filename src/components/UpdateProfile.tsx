@@ -11,6 +11,7 @@ import importImg from "../isun-icon.png";
 import { useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+// import firebase from "firebase/app";
 
 function Copyright() {
   return (
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   link: { color: "white", textDecoration: "none" },
 }));
 
-export default function Login({ handleLoginToggle }: any) {
+export default function Login() {
   const classes = useStyles();
   const emailRef = useRef<any>();
   const passwordRef = useRef<any>();
@@ -111,17 +112,38 @@ export default function Login({ handleLoginToggle }: any) {
       });
   }
 
+  const handleLogo = (e: any) => {
+    e.preventDefault();
+    history.push("/");
+  };
+
   const handleCancel = (e: any) => {
     e.preventDefault();
     history.push("/");
   };
+
+  // const handleUpdateUser = () => {
+  //   var user = firebase.auth().currentUser;
+
+  //   user
+  //     ?.updateProfile({
+  //       displayName: "Jane Q. User",
+  //       photoURL: "https://example.com/jane-q-user/profile.jpg",
+  //     })
+  //     .then(function () {
+  //       // Update successful.
+  //     })
+  //     .catch(function (error) {
+  //       // An error happened.
+  //     });
+  // };
 
   return (
     <div className={classes.container}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-          <Button>
+          <Button onClick={handleLogo}>
             <img className={classes.logo} src={importImg} alt="iSun logo" />
           </Button>
           <Typography component="h1" variant="h5" className={classes.paperText}>

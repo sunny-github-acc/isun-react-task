@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
+import firebase from "firebase/app";
 
 const initalState: any = {};
 
@@ -13,17 +14,36 @@ export function AuthProvider({ children }: any) {
   const [currentUser, setCurrentUser] = useState<any>();
   const [loading, setLoading] = useState(true);
 
-  function signup(email: string, password: string) {
-    return auth.createUserWithEmailAndPassword(email, password);
+  const handleUpdateUser = (
+    firstName: string,
+    lastName: string,
+    allow: string
+  ) => {
+    var user = firebase.auth().currentUser;
+
+    user
+      ?.updateProfile({
+        displayName: firstName + "#.#" + lastName + "#.#" + allow,
+      })
+      .then(function () {
+        // Update successful.
+      })
+      .catch(function (error) {
+        // An error happened.
+      });
+  };
+
+  function signup(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    allow: string
+  ) {
+    return auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => handleUpdateUser(firstName, lastName, allow));
   }
-  //     .then((user) {
-  //     user?.updateProfile({
-  //         displayName: "Jane Q. User",
-  //       })
-  //       .then(function () {
-  //         console.log("Update successful.");
-  //       })
-  //   })
 
   function login(email: string, password: string) {
     return auth.signInWithEmailAndPassword(email, password);
