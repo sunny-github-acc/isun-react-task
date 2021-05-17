@@ -7,9 +7,14 @@ import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import MoneyHouseIcon from "./MoneyHouseIcon";
 import PinDropIcon from "@material-ui/icons/PinDrop";
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
   createStyles({
-    root: {},
+    root: {
+      display: "none",
+      [theme.breakpoints.down("sm")]: {
+        display: "inline-flex",
+      },
+    },
     container: {
       display: "flex",
     },
@@ -23,6 +28,8 @@ const useStyles = makeStyles(() =>
       margin: "30px 30px 0 30px",
       display: "flex",
       alignItems: "center",
+      position: "relative",
+      left: "-20px",
     },
     side: {
       background: "transparent",
@@ -33,6 +40,7 @@ const useStyles = makeStyles(() =>
     a: {
       color: "white",
       display: "flex",
+      paddingLeft: "20px",
     },
     aIcon: {
       height: "30px",
@@ -47,10 +55,6 @@ export default function SimpleSlide({ checked }: any) {
   return (
     <div className={classes.root}>
       <div className={classes.wrapper}>
-        {/* <FormControlLabel
-          control={<Switch checked={checked} onChange={handleChange} />}
-          label="Show"
-        /> */}
         <div className={classes.container}>
           <Slide direction="down" in={checked} mountOnEnter unmountOnExit>
             <div>

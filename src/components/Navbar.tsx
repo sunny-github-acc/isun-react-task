@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
 import NavbarList from "./NavbarList";
-import { listItems, nestedListItems } from "./NavItems";
+import { listItems } from "./NavItems";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       height: "70px",
+      paddingTop: "20px",
     },
     toolbar: {
       display: "flex",
@@ -26,9 +27,14 @@ const useStyles = makeStyles((theme) =>
       marginRight: "10px",
       height: "40px",
       padding: "0 20px 0 20px",
+      whiteSpace: "nowrap",
       "&:hover": {
         background: "white",
         color: "#1A1D20",
+      },
+      display: "none",
+      [theme.breakpoints.up("md")]: {
+        display: "inline-flex",
       },
     },
     login: {
@@ -39,9 +45,22 @@ const useStyles = makeStyles((theme) =>
       height: "40px",
       background: "white",
       color: "#1A1D20",
+      whiteSpace: "nowrap",
       "&:hover": {
         color: "white",
       },
+      display: "none",
+      [theme.breakpoints.up("md")]: {
+        display: "inline-flex",
+      },
+    },
+    icons: {
+      display: "none",
+      [theme.breakpoints.down("sm")]: {
+        display: "inline-flex",
+      },
+      color: "white",
+      margin: 0,
     },
     menu: {
       color: "white",
@@ -85,7 +104,7 @@ const useStyles = makeStyles((theme) =>
         color: "#1E3AFF",
       },
     },
-    list: { display: "flex" },
+    list: { display: "flex", margin: 0 },
     nestedList: {
       display: "none",
       color: "white",
@@ -107,7 +126,14 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function ButtonAppBar({ theme, handleChange, checked }: any) {
+export default function ButtonAppBar({
+  theme,
+  handleChange,
+  handleMenu,
+  handleLoginToggle,
+  handleSignupToggle,
+  checked,
+}: any) {
   const classes = useStyles();
   const text = "What We Do";
 
@@ -115,7 +141,6 @@ export default function ButtonAppBar({ theme, handleChange, checked }: any) {
     <div className={classes.root}>
       <Toolbar className={classes.toolbar}>
         <Button className={classes.logo}>isun</Button>
-
         <Typography className={classes.menu}>
           <List
             component="nav"
@@ -133,11 +158,25 @@ export default function ButtonAppBar({ theme, handleChange, checked }: any) {
               </ListItem>
             ))}
           </List>
-          <Button className={classes.login} color="inherit">
+          <Button
+            className={classes.login}
+            color="inherit"
+            onClick={handleLoginToggle}
+          >
             Log in
           </Button>
-          <Button className={classes.signup} color="inherit">
+          <Button
+            className={classes.signup}
+            onClick={handleSignupToggle}
+            color="inherit"
+          >
             Sign up
+          </Button>
+          <Button className={classes.icons} onClick={handleLoginToggle}>
+            <i className="material-icons">login</i>
+          </Button>
+          <Button className={classes.icons} onClick={handleSignupToggle}>
+            <i className="material-icons">person_add</i>
           </Button>
           <Button className={classes.menuButton} onClick={handleChange}>
             {/* {checked ? (

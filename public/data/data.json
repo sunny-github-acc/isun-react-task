@@ -1,0 +1,11 @@
+{
+    "person": {
+        "name": "",
+        "surname": "",
+        "email": "",
+        "gender": "",
+        "birth": "",
+        "password": "",
+        "preferences": ""
+    }
+}

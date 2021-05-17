@@ -20,16 +20,16 @@ const useStyles = makeStyles((theme: Theme) =>
       "& span, & svg": {
         fontSize: "1.8rem",
         fontWeight: "bold",
-        lineHeight: "25px",
+        lineHeight: "15px",
       },
     },
     nested: {
       paddingLeft: theme.spacing(4),
       color: "#999999",
       "& span, & svg": {
-        fontSize: "1.2rem",
+        fontSize: "1.1rem",
         fontWeight: "bold",
-        lineHeight: "15px",
+        lineHeight: "8px",
       },
       "&:hover": {
         color: "white",
