@@ -5,6 +5,11 @@ import backgroundImg from "./hero-bg.jpg";
 import MenuContent from "./components/MenuContent";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import Info from "./components/PersonalInfo";
+import { AuthProvider } from "./contexts/AuthContext";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import ForgotPassword from "./components/ForgotPassword";
+import UpdateProfile from "./components/UpdateProfile";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -23,47 +28,30 @@ const useStyles = makeStyles(() =>
 function App() {
   const classes = useStyles();
   const [checked, setChecked] = React.useState(false);
-  const [checkedLogin, setCheckedLogin] = React.useState(false);
-  const [checkedSignup, setCheckedSignup] = React.useState(false);
 
   const handleChange = () => {
     setChecked((prev) => !prev);
   };
 
-  const handleMenu = () => {
-    setChecked(false);
-  };
-
-  const handleLoginToggle = () => {
-    setCheckedLogin(!checkedLogin);
-  };
-
-  const handleSignupToggle = () => {
-    setCheckedSignup(!checkedSignup);
-  };
-
   return (
     <div className={classes.root}>
       <div className={classes.container}>
-        <Navbar
-          handleChange={handleChange}
-          handleMenu={handleMenu}
-          checked={checked}
-          handleLoginToggle={handleLoginToggle}
-          handleSignupToggle={handleSignupToggle}
-        />
-        <MenuContent checked={checked}></MenuContent>
+        <Router>
+          <AuthProvider>
+            <Navbar handleChange={handleChange} checked={checked} />
+            <MenuContent checked={checked}></MenuContent>
 
-        {checkedLogin ? (
-          <Login handleLoginToggle={handleLoginToggle}></Login>
-        ) : (
-          ""
-        )}
-        {checkedSignup ? (
-          <Signup handleSignupToggle={handleSignupToggle}></Signup>
-        ) : (
-          ""
-        )}
+            {!checked && (
+              <Switch>
+                <Route exact path="/" component={Info} />
+                <Route path="/signup" component={Signup} />
+                <Route path="/login" component={Login} />
+                <Route path="/forgot-password" component={ForgotPassword} />
+                <Route path="/update-profile" component={UpdateProfile} />
+              </Switch>
+            )}
+          </AuthProvider>
+        </Router>
       </div>
     </div>
   );

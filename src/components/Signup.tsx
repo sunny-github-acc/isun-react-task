@@ -6,11 +6,13 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import importImg from "../isun-icon.png";
+import { useRef, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { Link as DomLink, useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -58,24 +60,150 @@ const useStyles = makeStyles((theme) => ({
   misc: {
     color: "#999",
   },
+  error: {
+    background: "pink",
+    textAlign: "center",
+  },
 }));
 
-export default function SignUp({ handleSignupToggle }: any) {
+export default function SignUp() {
   const classes = useStyles();
+  const firstNameRef = useRef<any>();
+  const lastNameRef = useRef<any>();
+  const emailRef = useRef<any>();
+  const passwordRef = useRef<any>();
+  const passwordConfirmRef = useRef<any>();
+  const allowRef = useRef<any>();
+  const history = useHistory();
+  const { signup }: any = useAuth();
+  const [error, setError] = useState<any>("");
+  const [firstNameError, setFirsNametError] = useState<any>([false, ""]);
+  const [lastNameError, setLastNameError] = useState<any>([false, ""]);
+  const [emailError, setEmailError] = useState<any>([false, ""]);
+  const [passwordError, setPasswordError] = useState<any>([false, ""]);
+  const [confirmPasswordError, setConfirmPasswordError] = useState<any>([
+    false,
+    "",
+  ]);
+  const [loading, setLoading] = useState<any>(false);
+  let textFieldError = false;
+
+  function emailValid(email: string) {
+    let re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (re.test(email)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function passwordValid(password: any) {
+    let re = {
+      capital: /[A-Za-z]/,
+      digit: /[0-9]/,
+      full: /^.{6,28}$/,
+    };
+
+    return (
+      re.capital.test(password) &&
+      re.digit.test(password) &&
+      re.full.test(password)
+    );
+  }
+
+  async function handleSubmit(e: any) {
+    e.preventDefault();
+
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+      setConfirmPasswordError([true, "Passwords do not match"]);
+      textFieldError = true;
+    }
+
+    if (firstNameRef.current.value === "") {
+      setFirsNametError([true, "First name is required"]);
+      textFieldError = true;
+    } else {
+      setFirsNametError([false, ""]);
+    }
+
+    if (lastNameRef.current.value === "") {
+      setLastNameError([true, "Last name is required"]);
+      textFieldError = true;
+    } else {
+      setLastNameError([false, ""]);
+    }
+
+    if (emailRef.current.value === "") {
+      setEmailError([true, "Email is required"]);
+      textFieldError = true;
+    } else if (!emailValid(emailRef.current.value)) {
+      setEmailError([true, "Email is not valid"]);
+      textFieldError = true;
+    } else {
+      setEmailError([false, ""]);
+    }
+
+    if (passwordRef.current.value === "") {
+      setPasswordError([true, "Password is required"]);
+      textFieldError = true;
+    } else if (!passwordValid(passwordRef.current.value)) {
+      setPasswordError([true, "Password is not valid"]);
+      textFieldError = true;
+    } else {
+      setPasswordError([false, ""]);
+    }
+
+    if (textFieldError) {
+      return null;
+    }
+
+    try {
+      setError("");
+      setLoading(true);
+      await signup(emailRef.current.value, passwordRef.current.value);
+      history.push("/");
+    } catch {
+      setError("Failed to create an account");
+      setLoading(false);
+    }
+  }
+
+  const handleLogo = (e: any) => {
+    e.preventDefault();
+    history.push("/");
+  };
 
   return (
     <div className={classes.container}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-          <Button onClick={handleSignupToggle}>
+          <Button onClick={handleLogo}>
             <img className={classes.logo} src={importImg} alt="iSun logo" />
           </Button>
           <Typography component="h1" variant="h5" className={classes.paperText}>
             Sign up to iSun
           </Typography>
+
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>
+              {error && (
+                <Grid item xs={12}>
+                  <TextField
+                    className={classes.error}
+                    variant="outlined"
+                    fullWidth
+                    id="error"
+                    label={error}
+                    name="error"
+                    autoComplete="error"
+                    error
+                    disabled
+                  />
+                </Grid>
+              )}
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="fname"
@@ -86,6 +214,9 @@ export default function SignUp({ handleSignupToggle }: any) {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  inputRef={firstNameRef}
+                  error={firstNameError[0]}
+                  helperText={firstNameError[1]}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -97,6 +228,9 @@ export default function SignUp({ handleSignupToggle }: any) {
                   label="Last Name"
                   name="lastName"
                   autoComplete="lname"
+                  inputRef={lastNameRef}
+                  error={lastNameError[0]}
+                  helperText={lastNameError[1]}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -108,6 +242,9 @@ export default function SignUp({ handleSignupToggle }: any) {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  inputRef={emailRef}
+                  error={emailError[0]}
+                  helperText={emailError[1]}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -120,6 +257,24 @@ export default function SignUp({ handleSignupToggle }: any) {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  inputRef={passwordRef}
+                  error={passwordError[0]}
+                  helperText={passwordError[1]}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="confirm-password"
+                  label="Confirm password"
+                  type="password"
+                  id="confirm-password"
+                  autoComplete="current-password"
+                  inputRef={passwordConfirmRef}
+                  error={confirmPasswordError[0]}
+                  helperText={confirmPasswordError[1]}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -128,6 +283,7 @@ export default function SignUp({ handleSignupToggle }: any) {
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }
                   label="I want to receive inspiration, marketing promotions and updates via email."
+                  inputRef={allowRef}
                 />
               </Grid>
             </Grid>
@@ -137,14 +293,16 @@ export default function SignUp({ handleSignupToggle }: any) {
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={handleSubmit}
+              disabled={loading}
             >
               Sign Up
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <Link href="#" variant="body2" className={classes.misc}>
+                <DomLink className={classes.misc} to="/login">
                   Already have an account? Sign in
-                </Link>
+                </DomLink>
               </Grid>
             </Grid>
           </form>

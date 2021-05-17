@@ -8,6 +8,8 @@ import { listItems } from "./NavItems";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import { useAuth } from "../contexts/AuthContext";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -126,16 +128,21 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function ButtonAppBar({
-  theme,
-  handleChange,
-  handleMenu,
-  handleLoginToggle,
-  handleSignupToggle,
-  checked,
-}: any) {
+export default function ButtonAppBar({ theme, handleChange, checked }: any) {
   const classes = useStyles();
   const text = "What We Do";
+  const { currentUser } = useAuth();
+  const history = useHistory();
+
+  const handleSignup = (e: any) => {
+    e.preventDefault();
+    history.push("/signup");
+  };
+
+  const handleLogin = (e: any) => {
+    e.preventDefault();
+    history.push("/login");
+  };
 
   return (
     <div className={classes.root}>
@@ -153,38 +160,41 @@ export default function ButtonAppBar({
               </div>
             </ListItem>
             {listItems.map((item) => (
-              <ListItem button className={classes.listItem} title={item}>
+              <ListItem
+                key={item}
+                button
+                className={classes.listItem}
+                title={item}
+              >
                 <ListItemText primary={item} />
               </ListItem>
             ))}
           </List>
-          <Button
-            className={classes.login}
-            color="inherit"
-            onClick={handleLoginToggle}
-          >
-            Log in
-          </Button>
-          <Button
-            className={classes.signup}
-            onClick={handleSignupToggle}
-            color="inherit"
-          >
-            Sign up
-          </Button>
-          <Button className={classes.icons} onClick={handleLoginToggle}>
-            <i className="material-icons">login</i>
-          </Button>
-          <Button className={classes.icons} onClick={handleSignupToggle}>
-            <i className="material-icons">person_add</i>
-          </Button>
+          {!currentUser && (
+            <span>
+              <Button
+                className={classes.login}
+                color="inherit"
+                onClick={handleLogin}
+              >
+                Log in
+              </Button>
+              <Button
+                className={classes.signup}
+                onClick={handleSignup}
+                color="inherit"
+              >
+                Sign up
+              </Button>
+              <Button className={classes.icons} onClick={handleLogin}>
+                <i className="material-icons">login</i>
+              </Button>
+              <Button className={classes.icons} onClick={handleSignup}>
+                <i className="material-icons">person_add</i>
+              </Button>
+            </span>
+          )}
           <Button className={classes.menuButton} onClick={handleChange}>
-            {/* {checked ? (
-              <p className={classes.menuButtonText}> Close </p>
-            ) : (
-              <p className={classes.menuButtonText}> Menu </p>
-            )} */}
-
             <MenuIcon className={classes.menuButtonIcon}></MenuIcon>
           </Button>
         </Typography>

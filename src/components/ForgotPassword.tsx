@@ -1,8 +1,6 @@
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -70,33 +68,33 @@ const useStyles = makeStyles((theme) => ({
     background: "pink",
     textAlign: "center",
   },
+  message: {
+    background: "palegreen",
+    textAlign: "center",
+  },
 }));
 
-export default function Login() {
+export default function Login({ handleLoginToggle }: any) {
   const classes = useStyles();
   const emailRef = useRef<any>();
-  const passwordRef = useRef<any>();
-  const rememberRef = useRef<any>();
-  const { login }: any = useAuth();
+  const { resetPassword }: any = useAuth();
   const [error, setError] = useState<any>("");
   const [loading, setLoading] = useState<any>(false);
   const history = useHistory();
-
-  const handleLogo = (e: any) => {
-    e.preventDefault();
-    history.push("/");
-  };
+  const [message, setMessage] = useState<any>("");
 
   async function handleSubmit(e: any) {
     e.preventDefault();
 
     try {
+      setMessage("");
       setError("");
       setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
+      await resetPassword(emailRef.current.value);
+      setMessage("Check your inbox for further instructions");
       history.push("/");
     } catch {
-      setError("Failed to log in");
+      setError("Failed to reset password");
     }
 
     setLoading(false);
@@ -107,11 +105,11 @@ export default function Login() {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-          <Button onClick={handleLogo}>
+          <Button onClick={handleLoginToggle}>
             <img className={classes.logo} src={importImg} alt="iSun logo" />
           </Button>
           <Typography component="h1" variant="h5" className={classes.paperText}>
-            Log in to iSun
+            Password reset
           </Typography>
           <form className={classes.form} noValidate>
             {error && (
@@ -125,6 +123,20 @@ export default function Login() {
                   name="error"
                   autoComplete="error"
                   error
+                  disabled
+                />
+              </Grid>
+            )}{" "}
+            {message && (
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.message}
+                  variant="outlined"
+                  fullWidth
+                  id="message"
+                  label={message}
+                  name="message"
+                  autoComplete="message"
                   disabled
                 />
               </Grid>
@@ -142,24 +154,6 @@ export default function Login() {
               className={classes.formItem}
               inputRef={emailRef}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              className={classes.formItem}
-              inputRef={passwordRef}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-              inputRef={rememberRef}
-            />
             <Button
               type="submit"
               fullWidth
@@ -169,17 +163,13 @@ export default function Login() {
               onClick={handleSubmit}
               disabled={loading}
             >
-              Log In
+              Reset password
             </Button>
             <Grid container>
-              <Grid item xs>
-                <DomLink className={classes.misc} to="/forgot-password">
-                  Forgot password?
-                </DomLink>
-              </Grid>
               <Grid item>
+                Need an account?{" "}
                 <DomLink className={classes.misc} to="/signup">
-                  Don't have an account? Sign Up
+                  Sign Up
                 </DomLink>
               </Grid>
             </Grid>

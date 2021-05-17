@@ -72,7 +72,7 @@ export default function NestedList() {
           onMouseLeave={handleClose}
         >
           {nestedListItems.map((item) => (
-            <ListItem button className={classes.nested} title={item}>
+            <ListItem key={item} button className={classes.nested} title={item}>
               <ListItemText primary={item} />
             </ListItem>
           ))}
@@ -80,7 +80,7 @@ export default function NestedList() {
       </Collapse>
 
       {listItems.map((item) => (
-        <ListItem button className={classes.listItem} title={item}>
+        <ListItem key={item} button className={classes.listItem} title={item}>
           <ListItemText primary={item} />
         </ListItem>
       ))}

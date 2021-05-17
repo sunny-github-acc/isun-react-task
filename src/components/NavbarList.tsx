@@ -90,6 +90,7 @@ export default function CustomizedMenus({ text }: any) {
       >
         {nestedListItems.map((item) => (
           <ListItem
+            key={item}
             onClick={handleClose}
             className={classes.listItem}
             component="nav"
