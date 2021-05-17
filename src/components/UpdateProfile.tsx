@@ -11,7 +11,8 @@ import importImg from "../isun-icon.png";
 import { useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-// import firebase from "firebase/app";
+import { Checkbox, FormControlLabel } from "@material-ui/core";
+import firebase from "firebase/app";
 
 function Copyright() {
   return (
@@ -74,18 +75,56 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
+  const firstNameRef = useRef<any>();
+  const lastNameRef = useRef<any>();
   const emailRef = useRef<any>();
   const passwordRef = useRef<any>();
   const passwordConfirmRef = useRef<any>();
+  const allowRef = useRef<any>();
   const [error, setError] = useState<any>("");
   const [loading, setLoading] = useState<any>(false);
   const history = useHistory();
   const { currentUser, updatePassword, updateEmail }: any = useAuth();
+  const [checked, setChecked] = useState<any>(false);
+
+  let userFirstName: any,
+    userLastName: any,
+    userAllow: any,
+    userAllowsEmails: any;
+
+  if (currentUser?.displayName) {
+    [userFirstName, userLastName, userAllow] =
+      currentUser.displayName.split("#.#");
+    userAllowsEmails = checked;
+  }
+
+  const handleUpdateUser = () => {
+    var user = firebase.auth().currentUser;
+
+    user
+      ?.updateProfile({
+        displayName:
+          firstNameRef.current.value +
+          "#.#" +
+          lastNameRef.current.value +
+          "#.#" +
+          checked,
+      })
+      .then(function () {})
+      .catch(function (error) {
+        console.log("nay", error);
+      });
+  };
 
   async function handleSubmit(e: any) {
     e.preventDefault();
 
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+    handleUpdateUser();
+
+    if (
+      passwordRef.current.value.length !== 0 &&
+      passwordRef.current.value !== passwordConfirmRef.current.value
+    ) {
       return setError("Passwords do not match");
     }
 
@@ -93,16 +132,17 @@ export default function Login() {
     setLoading(true);
     setError("");
 
-    if (emailRef.current.value !== currentUser.email) {
+    if (emailRef.current.value !== currentUser?.email) {
       promises.push(updateEmail(emailRef.current.value));
     }
+
     if (passwordRef.current.value) {
-      promises.push(updatePassword(passwordRef.current.value));
+      promises.push(updatePassword(passwordRef?.current.value));
     }
 
     Promise.all(promises)
       .then(() => {
-        history.push("/");
+        history.push("/", true);
       })
       .catch(() => {
         setError("Failed to update account");
@@ -121,22 +161,6 @@ export default function Login() {
     e.preventDefault();
     history.push("/");
   };
-
-  // const handleUpdateUser = () => {
-  //   var user = firebase.auth().currentUser;
-
-  //   user
-  //     ?.updateProfile({
-  //       displayName: "Jane Q. User",
-  //       photoURL: "https://example.com/jane-q-user/profile.jpg",
-  //     })
-  //     .then(function () {
-  //       // Update successful.
-  //     })
-  //     .catch(function (error) {
-  //       // An error happened.
-  //     });
-  // };
 
   return (
     <div className={classes.container}>
@@ -171,12 +195,36 @@ export default function Login() {
                 <TextField
                   variant="outlined"
                   fullWidth
+                  id="first-name"
+                  label="First Name"
+                  name="first-name"
+                  autoComplete="first name"
+                  inputRef={firstNameRef}
+                  defaultValue={userFirstName}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  id="last-name"
+                  label="Last Name"
+                  name="last-name"
+                  autoComplete="last name"
+                  inputRef={lastNameRef}
+                  defaultValue={userLastName}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
                   inputRef={emailRef}
-                  defaultValue={currentUser.email}
+                  defaultValue={currentUser?.email}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -189,7 +237,7 @@ export default function Login() {
                   id="password"
                   autoComplete="current-password"
                   inputRef={passwordRef}
-                  defaultValue={currentUser.password}
+                  defaultValue={currentUser?.password}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -202,6 +250,17 @@ export default function Login() {
                   id="confirm-password"
                   autoComplete="current-password"
                   inputRef={passwordConfirmRef}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox value="allowExtraEmails" color="primary" />
+                  }
+                  label="I want to receive inspiration, marketing promotions and updates via email."
+                  inputRef={allowRef}
+                  defaultValue={userAllow}
+                  onChange={() => setChecked(!checked)}
                 />
               </Grid>
             </Grid>

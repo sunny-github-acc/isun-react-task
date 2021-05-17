@@ -1,7 +1,7 @@
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
@@ -73,12 +73,11 @@ export default function CenteredGrid() {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-  let userFirstName, userLastName, userAllow, userAllowsEmails;
+  let userFirstName, userLastName, userAllowsEmails;
 
-  if (currentUser.displayName) {
-    [userFirstName, userLastName, userAllow] =
+  if (currentUser?.displayName) {
+    [userFirstName, userLastName, userAllowsEmails] =
       currentUser.displayName.split("#.#");
-    userAllowsEmails = userAllow === "allowExtraEmails";
   }
 
   async function handleLogout() {
@@ -126,20 +125,6 @@ export default function CenteredGrid() {
               md={2}
               className={`${classes.grid} ${classes.tablet}`}
             >
-              <Paper className={classes.paper}>Email</Paper>
-            </Grid>
-            <Grid item xs={12} md={9} className={classes.grid}>
-              <Paper className={classes.paper}>
-                <i className={`material-icons ${classes.icon}`}>email</i>{" "}
-                {currentUser.email}
-              </Paper>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={2}
-              className={`${classes.grid} ${classes.tablet}`}
-            >
               <Paper className={classes.paper}>Name</Paper>
             </Grid>
             <Grid item xs={12} md={9} className={classes.grid}>
@@ -148,6 +133,20 @@ export default function CenteredGrid() {
               <Paper className={classes.paper}>
                 <i className={`material-icons ${classes.icon}`}>person</i>{" "}
                 {userFirstName} {userLastName}
+              </Paper>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={2}
+              className={`${classes.grid} ${classes.tablet}`}
+            >
+              <Paper className={classes.paper}>Email</Paper>
+            </Grid>
+            <Grid item xs={12} md={9} className={classes.grid}>
+              <Paper className={classes.paper}>
+                <i className={`material-icons ${classes.icon}`}>email</i>{" "}
+                {currentUser.email}
               </Paper>
             </Grid>
             <Grid
@@ -169,8 +168,11 @@ export default function CenteredGrid() {
                 <i className={`material-icons ${classes.icon}`}>
                   notifications
                 </i>
-                {userAllowsEmails && <div>Subscribed</div>}
-                {!userAllowsEmails && <div>Not subscribed</div>}
+                {userAllowsEmails === "true" ? (
+                  <div>Subscribed</div>
+                ) : (
+                  <div>Not subscribed</div>
+                )}
               </Paper>
             </Grid>
             <Grid item xs={12} md={11} className={classes.grid}>

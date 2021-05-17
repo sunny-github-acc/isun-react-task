@@ -76,6 +76,7 @@ export default function SignUp() {
   const allowRef = useRef<any>();
   const history = useHistory();
   const { signup }: any = useAuth();
+  const [checked, setChecked] = useState<any>(false);
   const [error, setError] = useState<any>("");
   const [firstNameError, setFirsNametError] = useState<any>([false, ""]);
   const [lastNameError, setLastNameError] = useState<any>([false, ""]);
@@ -167,7 +168,7 @@ export default function SignUp() {
         passwordRef.current.value,
         firstNameRef.current.value,
         lastNameRef.current.value,
-        allowRef.current.value
+        checked
       );
       history.push("/");
     } catch {
@@ -286,7 +287,11 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <FormControlLabel
                   control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
+                    <Checkbox
+                      value={true}
+                      color="primary"
+                      onChange={() => setChecked(!checked)}
+                    />
                   }
                   label="I want to receive inspiration, marketing promotions and updates via email."
                   inputRef={allowRef}
