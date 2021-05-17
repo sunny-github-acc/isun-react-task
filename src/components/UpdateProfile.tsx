@@ -87,15 +87,11 @@ export default function Login() {
   const { currentUser, updatePassword, updateEmail }: any = useAuth();
   const [checked, setChecked] = useState<any>(false);
 
-  let userFirstName: any,
-    userLastName: any,
-    userAllow: any,
-    userAllowsEmails: any;
+  let userFirstName: any, userLastName: any, userAllow: any;
 
   if (currentUser?.displayName) {
     [userFirstName, userLastName, userAllow] =
       currentUser.displayName.split("#.#");
-    userAllowsEmails = checked;
   }
 
   const handleUpdateUser = () => {
