@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/isun-task/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/isun-task/static/js/main.7dda0fd7.chunk.js",
+    "main.js.map": "/isun-task/static/js/main.7dda0fd7.chunk.js.map",
+    "runtime-main.js": "/isun-task/static/js/runtime-main.fb55cb98.js",
+    "runtime-main.js.map": "/isun-task/static/js/runtime-main.fb55cb98.js.map",
+    "static/js/2.db054ffe.chunk.js": "/isun-task/static/js/2.db054ffe.chunk.js",
+    "static/js/2.db054ffe.chunk.js.map": "/isun-task/static/js/2.db054ffe.chunk.js.map",
+    "static/js/3.fd2eacd6.chunk.js": "/isun-task/static/js/3.fd2eacd6.chunk.js",
+    "static/js/3.fd2eacd6.chunk.js.map": "/isun-task/static/js/3.fd2eacd6.chunk.js.map",
+    "index.html": "/isun-task/index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "/isun-task/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.db054ffe.chunk.js.LICENSE.txt": "/isun-task/static/js/2.db054ffe.chunk.js.LICENSE.txt",
+    "static/media/hero-bg.32fbf628.jpg": "/isun-task/static/media/hero-bg.32fbf628.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fb55cb98.js",
+    "static/js/2.db054ffe.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.7dda0fd7.chunk.js"
+  ]
+}
