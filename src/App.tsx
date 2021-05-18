@@ -10,6 +10,9 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ForgotPassword from "./components/ForgotPassword";
 import UpdateProfile from "./components/UpdateProfile";
+import UpdateName from "./components/UpdateName";
+import UpdateEmail from "./components/UpdateEmail";
+import UpdateSubscribtion from "./components/UpdateSubscribtion";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -48,6 +51,12 @@ function App() {
                 <Route path="/login" component={Login} />
                 <Route path="/forgot-password" component={ForgotPassword} />
                 <Route path="/update-profile" component={UpdateProfile} />
+                <Route path="/update-name" component={UpdateName} />
+                <Route path="/update-email" component={UpdateEmail} />
+                <Route
+                  path="/update-subscription"
+                  component={UpdateSubscribtion}
+                />
               </Switch>
             )}
           </AuthProvider>

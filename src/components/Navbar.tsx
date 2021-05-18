@@ -10,6 +10,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useAuth } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -133,6 +134,8 @@ export default function ButtonAppBar({ theme, handleChange, checked }: any) {
   const text = "What We Do";
   const { currentUser } = useAuth();
   const history = useHistory();
+  const { logout } = useAuth();
+  const [error, setError] = useState("");
 
   const handleSignup = (e: any) => {
     e.preventDefault();
@@ -144,8 +147,26 @@ export default function ButtonAppBar({ theme, handleChange, checked }: any) {
     history.push("/login");
   };
 
+  async function handleLogout() {
+    setError("");
+
+    try {
+      await logout();
+      history.push("/login");
+    } catch {
+      setError("Failed to log out");
+    }
+  }
+
   return (
     <div className={classes.root}>
+      {" "}
+      {error && (
+        <div>
+          <i className={`material-icons`}>warning</i>
+          {error}
+        </div>
+      )}
       <Toolbar className={classes.toolbar}>
         <Button className={classes.logo}>isun</Button>
         <Typography className={classes.menu}>
@@ -191,6 +212,21 @@ export default function ButtonAppBar({ theme, handleChange, checked }: any) {
               </Button>
               <Button className={classes.icons} onClick={handleSignup}>
                 <i className="material-icons">person_add</i>
+              </Button>
+            </span>
+          )}{" "}
+          {currentUser && (
+            <span>
+              <Button
+                className={classes.signup}
+                color="inherit"
+                onClick={handleLogout}
+              >
+                Log out
+              </Button>
+
+              <Button className={classes.icons} onClick={handleLogin}>
+                <i className="material-icons">logout</i>
               </Button>
             </span>
           )}
