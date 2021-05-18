@@ -1,7 +1,7 @@
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
@@ -73,12 +73,18 @@ export default function CenteredGrid() {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-  let userFirstName, userLastName, userAllowsEmails;
+  const [userFirstName, setUserFirstName] = useState<any>();
+  const [userLastName, setUserLastName] = useState<any>();
+  const [userAllowEmails, setUserAllowEmails] = useState<any>();
 
-  if (currentUser?.displayName) {
-    [userFirstName, userLastName, userAllowsEmails] =
-      currentUser.displayName.split("#.#");
-  }
+  useEffect(() => {
+    if (currentUser?.displayName) {
+      const info = currentUser.displayName.split("#.#");
+      setUserFirstName(info[0]);
+      setUserLastName(info[1]);
+      setUserAllowEmails(info[2]);
+    }
+  }, [currentUser.displayName]);
 
   async function handleLogout() {
     setError("");
@@ -168,7 +174,7 @@ export default function CenteredGrid() {
                 <i className={`material-icons ${classes.icon}`}>
                   notifications
                 </i>
-                {userAllowsEmails === "true" ? (
+                {userAllowEmails === "true" ? (
                   <div>Subscribed</div>
                 ) : (
                   <div>Not subscribed</div>

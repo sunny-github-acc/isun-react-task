@@ -14,24 +14,12 @@ export function AuthProvider({ children }: any) {
   const [currentUser, setCurrentUser] = useState<any>();
   const [loading, setLoading] = useState(true);
 
-  const handleUpdateUser = (
-    firstName: string,
-    lastName: string,
-    allow: string
-  ) => {
-    var user = firebase.auth().currentUser;
-
-    user
-      ?.updateProfile({
-        displayName: firstName + "#.#" + lastName + "#.#" + allow,
-      })
-      .then(function () {
-        // Update successful.
-      })
-      .catch(function (error) {
-        // An error happened.
-      });
-  };
+  function updateUser(firstName: string, lastName: string, allow: string) {
+    let user = firebase.auth().currentUser;
+    return user?.updateProfile({
+      displayName: firstName + "#.#" + lastName + "#.#" + allow,
+    });
+  }
 
   function signup(
     email: string,
@@ -42,7 +30,7 @@ export function AuthProvider({ children }: any) {
   ) {
     return auth
       .createUserWithEmailAndPassword(email, password)
-      .then(() => handleUpdateUser(firstName, lastName, allow));
+      .then(() => updateUser(firstName, lastName, allow));
   }
 
   function login(email: string, password: string) {
@@ -80,6 +68,7 @@ export function AuthProvider({ children }: any) {
     resetPassword,
     updateEmail,
     updatePassword,
+    updateUser,
   };
 
   return (

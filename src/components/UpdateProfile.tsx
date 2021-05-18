@@ -12,7 +12,6 @@ import { useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Checkbox, FormControlLabel } from "@material-ui/core";
-import firebase from "firebase/app";
 
 function Copyright() {
   return (
@@ -84,7 +83,8 @@ export default function Login() {
   const [error, setError] = useState<any>("");
   const [loading, setLoading] = useState<any>(false);
   const history = useHistory();
-  const { currentUser, updatePassword, updateEmail }: any = useAuth();
+  const { currentUser, updatePassword, updateEmail, updateUser }: any =
+    useAuth();
   const [checked, setChecked] = useState<any>(false);
 
   let userFirstName: any, userLastName: any, userAllow: any;
@@ -94,33 +94,10 @@ export default function Login() {
       currentUser.displayName.split("#.#");
   }
 
-  const handleUpdateUser = () => {
-    var user = firebase.auth().currentUser;
-
-    user
-      ?.updateProfile({
-        displayName:
-          firstNameRef.current.value +
-          "#.#" +
-          lastNameRef.current.value +
-          "#.#" +
-          checked,
-      })
-      .then(function () {})
-      .catch(function (error) {
-        console.log("nay", error);
-      });
-  };
-
   async function handleSubmit(e: any) {
     e.preventDefault();
 
-    handleUpdateUser();
-
-    if (
-      passwordRef.current.value.length !== 0 &&
-      passwordRef.current.value !== passwordConfirmRef.current.value
-    ) {
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match");
     }
 
@@ -136,12 +113,16 @@ export default function Login() {
       promises.push(updatePassword(passwordRef?.current.value));
     }
 
+    promises.push(
+      updateUser(firstNameRef.current.value, lastNameRef.current.value, checked)
+    );
+
     Promise.all(promises)
       .then(() => {
-        history.push("/", true);
+        history.push("/");
       })
       .catch(() => {
-        setError("Failed to update account");
+        return setError("Failed to update account");
       })
       .finally(() => {
         setLoading(false);

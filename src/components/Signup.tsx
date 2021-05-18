@@ -169,8 +169,9 @@ export default function SignUp() {
         firstNameRef.current.value,
         lastNameRef.current.value,
         checked
-      );
-      history.push("/");
+      ).then(() => {
+        history.push("/");
+      });
     } catch {
       setError("Failed to create an account");
       setLoading(false);
