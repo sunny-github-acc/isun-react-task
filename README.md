@@ -1,10 +1,10 @@
-# We Can Code Academy Task
+# iSun task
 
-ISun task app lets users to signup, login and logout. Users may change their name, email, and subscription status.
+ISun task app lets users to signup, login and logout. Users may change their name, email, and/or subscription status.
 
 ## Presentation 
 
-![](https://user-images.githubusercontent.com/54981869/132192298-8a12714b-aae7-433b-bf6b-d05f9b4e4fce.gif)
+![](https://user-images.githubusercontent.com/54981869/132205917-95768c1b-e584-4d15-89a7-ce6f07dcc1ac.gif)
 
 
 ## Getting Started
