@@ -1,6 +1,6 @@
 # iSun task
 
-ISun task app lets users to signup, login and logout. Users may change their name, email, and/or subscription status.
+ISun task app lets users signing up, loging in and loging out. Users may change their name, email, and/or subscription status.
 
 ## Presentation 
 
